@@ -90,6 +90,14 @@ dependencies {
 	testRuntimeOnly("org.hsqldb:hsqldb")
 }
 
+//skip Test tasks
+gradle.taskGraph.whenReady {
+	tasks.each { task ->
+		if (task.name.contains("test")) {
+			task.enabled = false
+		}
+	}
+}
 compileJava {
 	options.compilerArgs << "-parameters"
 }

@@ -13,3 +13,11 @@ dependencies {
 	testImplementation("org.awaitility:awaitility")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 }
+//skip Test tasks
+gradle.taskGraph.whenReady {
+	tasks.each { task ->
+		if (task.name.contains("test")) {
+			task.enabled = false
+		}
+	}
+}
