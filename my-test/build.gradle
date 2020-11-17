@@ -12,6 +12,6 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
-    implementation(project(":spring-boot-project:spring-boot"))
+    implementation(project(":spring-boot-project:spring-boot-starters:spring-boot-starter-web"))
     implementation(project(":spring-boot-project:spring-boot-autoconfigure"))
 }

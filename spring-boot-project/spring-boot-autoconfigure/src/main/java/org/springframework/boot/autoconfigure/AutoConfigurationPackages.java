@@ -120,6 +120,7 @@ public abstract class AutoConfigurationPackages {
 
 		@Override
 		public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
+			// 注入AutoConfigurationPackages的beanDefinition
 			register(registry, new PackageImport(metadata).getPackageName());
 		}
 

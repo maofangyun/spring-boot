@@ -268,8 +268,11 @@ public class SpringApplication {
 		this.resourceLoader = resourceLoader;
 		Assert.notNull(primarySources, "PrimarySources must not be null");
 		this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
+		// 当依赖包包含SERVLET_INDICATOR_CLASSE中的类时,webApplicationType=SERVLET,否则webApplicationType=NONE
 		this.webApplicationType = WebApplicationType.deduceFromClasspath();
+		// 从spring.factories文件中读取ApplicationContextInitializer接口的实现类,并实例化加入initializers中
 		setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
+		// 从spring.factories文件中读取ApplicationListener接口的实现类,并实例化加入listeners中
 		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
 		this.mainApplicationClass = deduceMainApplicationClass();
 	}
@@ -307,11 +310,16 @@ public class SpringApplication {
 			ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
 			ConfigurableEnvironment environment = prepareEnvironment(listeners, applicationArguments);
 			configureIgnoreBeanInfo(environment);
+			// 打印横幅
 			Banner printedBanner = printBanner(environment);
+			// 创建容器,通过{ "javax.servlet.Servlet","org.springframework.web.context.ConfigurableWebApplicationContext"}能否成功加载,判定是否web环境
+			// 非web环境,context=AnnotationConfigApplicationContext
+			// web环境,context=AnnotationConfigServletWebServerApplicationContext
 			context = createApplicationContext();
 			exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
 					new Class[] { ConfigurableApplicationContext.class }, context);
 			prepareContext(context, environment, listeners, applicationArguments, printedBanner);
+			// 刷新并启动容器
 			refreshContext(context);
 			afterRefresh(context, applicationArguments);
 			stopWatch.stop();
@@ -422,7 +430,7 @@ public class SpringApplication {
 
 	private <T> Collection<T> getSpringFactoriesInstances(Class<T> type, Class<?>[] parameterTypes, Object... args) {
 		ClassLoader classLoader = getClassLoader();
-		// Use names and ensure unique to protect against duplicates
+		// 从spring.factories文件中读取type类型的类的全限定名称
 		Set<String> names = new LinkedHashSet<>(SpringFactoriesLoader.loadFactoryNames(type, classLoader));
 		List<T> instances = createSpringFactoriesInstances(type, parameterTypes, classLoader, args, names);
 		AnnotationAwareOrderComparator.sort(instances);
