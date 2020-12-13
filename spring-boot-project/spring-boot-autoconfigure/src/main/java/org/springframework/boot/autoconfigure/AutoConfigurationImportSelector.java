@@ -113,7 +113,7 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 			return EMPTY_ENTRY;
 		}
 		AnnotationAttributes attributes = getAttributes(annotationMetadata);
-		// 获取spring.factories文件中的 key=org.springframework.boot.autoconfigure.EnableAutoConfiguration 下所有的类全限定名称
+		// 获取spring.factories文件中的 key=org.springframework.boot.autoconfigure.EnableAutoConfiguration下所有的类全限定名称
 		List<String> configurations = getCandidateConfigurations(annotationMetadata, attributes);
 		configurations = removeDuplicates(configurations);
 		Set<String> exclusions = getExclusions(annotationMetadata, attributes);

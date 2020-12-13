@@ -268,7 +268,7 @@ public class SpringApplication {
 		this.resourceLoader = resourceLoader;
 		Assert.notNull(primarySources, "PrimarySources must not be null");
 		this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
-		// 当依赖包包含SERVLET_INDICATOR_CLASSE中的类时,webApplicationType=SERVLET,否则webApplicationType=NONE
+		// 当依赖包包含SERVLET_INDICATOR_CLASSE中的类时,webApplicationType=SERVLET,否则webApplicationType=NONE(判断是否为web环境)
 		this.webApplicationType = WebApplicationType.deduceFromClasspath();
 		// 从spring.factories文件中读取ApplicationContextInitializer接口的实现类,并实例化加入initializers中
 		setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
@@ -304,7 +304,9 @@ public class SpringApplication {
 		ConfigurableApplicationContext context = null;
 		Collection<SpringBootExceptionReporter> exceptionReporters = new ArrayList<>();
 		configureHeadlessProperty();
+		// 从spring.factories文件中读取SpringApplicationRunListener类型的类的全限定名称并实例化
 		SpringApplicationRunListeners listeners = getRunListeners(args);
+		// 启动监听器,并向所有监听者广播ApplicationStartingEvent事件
 		listeners.starting();
 		try {
 			ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
