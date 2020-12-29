@@ -78,6 +78,7 @@ class ConfigurationPropertiesBinder {
 
 	ConfigurationPropertiesBinder(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
+		// 获取外部的所有配置
 		this.propertySources = new PropertySourcesDeducer(applicationContext).getPropertySources();
 		this.configurationPropertiesValidator = getConfigurationPropertiesValidator(applicationContext);
 		this.jsr303Present = ConfigurationPropertiesJsr303Validator.isJsr303Present(applicationContext);

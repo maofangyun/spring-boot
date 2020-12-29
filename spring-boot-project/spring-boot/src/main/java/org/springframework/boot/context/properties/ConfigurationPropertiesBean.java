@@ -197,7 +197,9 @@ public final class ConfigurationPropertiesBean {
 	 * {@link ConfigurationProperties @ConfigurationProperties}
 	 */
 	public static ConfigurationPropertiesBean get(ApplicationContext applicationContext, Object bean, String beanName) {
+		// 获取工厂方法,适用于@Bean和@ConfigurationProperties一起用的情况
 		Method factoryMethod = findFactoryMethod(applicationContext, beanName);
+		// 返回ConfigurationPropertiesBean
 		return create(beanName, bean, bean.getClass(), factoryMethod);
 	}
 
@@ -254,6 +256,7 @@ public final class ConfigurationPropertiesBean {
 	}
 
 	private static ConfigurationPropertiesBean create(String name, Object instance, Class<?> type, Method factory) {
+		// 获取factory方法上标注的@ConfigurationProperties注解信息,不存在返回null
 		ConfigurationProperties annotation = findAnnotation(instance, type, factory, ConfigurationProperties.class);
 		if (annotation == null) {
 			return null;
@@ -261,12 +264,14 @@ public final class ConfigurationPropertiesBean {
 		Validated validated = findAnnotation(instance, type, factory, Validated.class);
 		Annotation[] annotations = (validated != null) ? new Annotation[] { annotation, validated }
 				: new Annotation[] { annotation };
+		// 获取需要进行属性绑定的对象类型
 		ResolvableType bindType = (factory != null) ? ResolvableType.forMethodReturnType(factory)
 				: ResolvableType.forClass(type);
 		Bindable<Object> bindTarget = Bindable.of(bindType).withAnnotations(annotations);
 		if (instance != null) {
 			bindTarget = bindTarget.withExistingValue(instance);
 		}
+		// 封装了后续进行属性绑定的所需信息
 		return new ConfigurationPropertiesBean(name, instance, annotation, bindTarget);
 	}
 

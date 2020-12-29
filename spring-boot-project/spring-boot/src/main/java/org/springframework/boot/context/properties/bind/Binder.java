@@ -316,6 +316,7 @@ public class Binder {
 				return handleBindResult(name, target, handler, context, null, create);
 			}
 			target = replacementTarget;
+			// 真正把对象属性值和配置文件绑定的逻辑
 			Object bound = bindObject(name, target, handler, context, allowRecursiveBinding);
 			return handleBindResult(name, target, handler, context, bound, create);
 		}

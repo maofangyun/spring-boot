@@ -86,6 +86,7 @@ public class ConfigurationPropertiesBindingPostProcessor
 		Assert.state(bean.getBindMethod() == BindMethod.JAVA_BEAN, "Cannot bind @ConfigurationProperties for bean '"
 				+ bean.getName() + "'. Ensure that @ConstructorBinding has not been applied to regular bean");
 		try {
+			// 真正的绑定逻辑,binder是初始化当前对象(实现了InitializingBean接口)就注册进来的
 			this.binder.bind(bean);
 		}
 		catch (Exception ex) {

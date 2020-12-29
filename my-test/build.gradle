@@ -7,11 +7,14 @@ version '2.3.0.BUILD-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    flatDir {dirs 'libs'}
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
+    compile files("libs/custom-starter-1.0.jar")
     implementation(project(":spring-boot-project:spring-boot-starters:spring-boot-starter-web"))
     implementation(project(":spring-boot-project:spring-boot-autoconfigure"))
+    implementation(project(":spring-boot-project:spring-boot"))
 }
