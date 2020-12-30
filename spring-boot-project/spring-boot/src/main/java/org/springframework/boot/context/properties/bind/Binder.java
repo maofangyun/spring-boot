@@ -311,6 +311,7 @@ public class Binder {
 	private <T> T bind(ConfigurationPropertyName name, Bindable<T> target, BindHandler handler, Context context,
 			boolean allowRecursiveBinding, boolean create) {
 		try {
+			// 调用onStart()方法
 			Bindable<T> replacementTarget = handler.onStart(name, target, context);
 			if (replacementTarget == null) {
 				return handleBindResult(name, target, handler, context, null, create);
@@ -371,6 +372,10 @@ public class Binder {
 		if (property == null && context.depth != 0 && containsNoDescendantOf(context.getSources(), name)) {
 			return null;
 		}
+		// 处理集合类型的情况,比如:
+		// people.address[0]=beijing
+		// people.address[1]=shanghai
+		// people.address[2]=guangzhou
 		AggregateBinder<?> aggregateBinder = getAggregateBinder(target, context);
 		if (aggregateBinder != null) {
 			return bindAggregate(name, target, handler, context, aggregateBinder);

@@ -87,6 +87,7 @@ class ConfigurationPropertiesBinder {
 	BindResult<?> bind(ConfigurationPropertiesBean propertiesBean) {
 		Bindable<?> target = propertiesBean.asBindTarget();
 		ConfigurationProperties annotation = propertiesBean.getAnnotation();
+		// 获取绑定处理器,主要作用是进行绑定时的各种回调(onStart,onSuccess,onCreate,onFailure和onFinish)
 		BindHandler bindHandler = getBindHandler(target, annotation);
 		return getBinder().bind(annotation.prefix(), target, bindHandler);
 	}
